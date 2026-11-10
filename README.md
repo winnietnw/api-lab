@@ -17,3 +17,11 @@
 - Expected result: HTTP 400 with a JSON error message.
 - Actual result: HTTP 500 with an empty response body.
 - Severity: Not specified in the lab instructions.
+
+## Part A: Input Domain Model
+| Characteristic | Blocks | Values in the tests |
+|---|---|---|
+| C1 Value of stars | below 1, 1 to 5 (base), above 5 | 0, 3, 6 |
+| C2 Type of stars | whole number (base), decimal, text, missing | 3, 3.5, "3", no field |
+| C3 Pizza | exists (base), does not exist | a new pizza, 999999999 |
+| C4 Token | the user's own (base), none, wrong length | from auth, no header, token short |
