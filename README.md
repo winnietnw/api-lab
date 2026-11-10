@@ -55,7 +55,7 @@
 6. The status codes in Step A4 were:
    - Read: 404
    - Change: 400
-   - Delete: 400
+   - Delete: 400    
    I expected the API to refuse all three requests with a 4xx status code. All three responses were within the expected range, so this is not a defect.
-7. The request with the made-up token should return 401 Unauthorized with an authentication failed message. This is not a defect because the API correctly rejects an invalid token. However, if a stranger could use an invalid or unauthorized token to access private ratings on a real system, it would be a security problem because private user data could be exposed.
+7. The request with a made-up token returned 401 Unauthorized with the error message "authentication failed". This is the expected result because the API correctly rejects an invalid token. This is not a defect.
 8. An API test can check status codes, response data, and whether the API behaves correctly. A test through the web pages can check visual appearance, layout, and whether the user interface works correctly.
