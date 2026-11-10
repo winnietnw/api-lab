@@ -33,3 +33,8 @@
 | C4 Token | Own token (base) | From auth | test_base_choice_is_saved |
 | C4 Token | None | No header | test_rating_without_token |
 | C4 Token | Wrong length | Token abc | test_rating_with_wrong_token |
+
+- Step A4, status codes when the other user reads, changes and deletes:
+  - Read: 404
+  - Change: 400
+  - Delete: 400
