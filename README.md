@@ -19,9 +19,17 @@
 - Severity: Not specified in the lab instructions.
 
 ## Part A: Input Domain Model
-| Characteristic | Blocks | Values in the tests |
-|---|---|---|
-| C1 Value of stars | below 1, 1 to 5 (base), above 5 | 0, 3, 6 |
-| C2 Type of stars | whole number (base), decimal, text, missing | 3, 3.5, "3", no field |
-| C3 Pizza | exists (base), does not exist | a new pizza, 999999999 |
-| C4 Token | the user's own (base), none, wrong length | from auth, no header, token short |
+| Characteristic | Blocks | Values in the tests | Test |
+|---|---|---|---|
+| C1 Value of stars | Below 1 | 0 | test_stars_out_of_range[0] |
+| C1 Value of stars | 1 to 5 (base) | 3 | test_base_choice_is_saved |
+| C1 Value of stars | Above 5 | 6 | test_stars_out_of_range[6] |
+| C2 Type of stars | Whole number (base) | 3 | test_base_choice_is_saved |
+| C2 Type of stars | Decimal | 3.5 | test_stars_decimal |
+| C2 Type of stars | Text | "3" | test_stars_text |
+| C2 Type of stars | Missing | No field | test_stars_missing |
+| C3 Pizza | Exists (base) | Existing pizza | test_base_choice_is_saved |
+| C3 Pizza | Does not exist | 999999999 | test_pizza_does_not_exist |
+| C4 Token | Own token (base) | From auth | test_base_choice_is_saved |
+| C4 Token | None | No header | test_rating_without_token |
+| C4 Token | Wrong length | Token abc | test_rating_with_wrong_token |
