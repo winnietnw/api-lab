@@ -38,3 +38,24 @@
   - Read: 404
   - Change: 400
   - Delete: 400
+
+## Part B
+1. API tests can find network problems and integration problems between the application and the real server, which unit tests with stubs cannot detect. Unit tests with stubs are still useful because they run faster, are easier to control, and can test individual functions without depending on the real server.
+2. Every test creates its own user with a new name to avoid conflicts with other tests and to keep test data independent. Using the public token would mean sharing the same account and data. In Project 2, I will apply the same idea by creating separate test users and test data for each test instead of sharing one account.
+3. A session allows multiple requests to share cookies and maintain information between requests. This makes the tests more consistent and avoids creating a new connection for every request. In Step 0.12, two runs passed and one run failed with 401 Unauthorized.
+4. The block where all three tools are excluded revealed the defect. A 500 error with an empty body is worse because the client does not receive a useful error message to explain what went wrong. The test stays as xfail to document the known defect and detect when the server fixes it.
+5. Base choice coverage needs 9 tests:
+   - C1: 3 blocks
+   - C2: 4 blocks
+   - C3: 2 blocks
+   - C4: 3 blocks
+   Total = 1 + (3-1) + (4-1) + (2-1) + (3-1) = 9 tests.
+   All combinations coverage needs 72 tests:
+   3 x 4 x 2 x 3 = 72 tests.
+6. The status codes in Step A4 were:
+   - Read: 404
+   - Change: 400
+   - Delete: 400
+   I expected the API to refuse all three requests with a 4xx status code. All three responses were within the expected range, so this is not a defect.
+7. The request with the made-up token should return 401 Unauthorized with an authentication failed message. This is not a defect because the API correctly rejects an invalid token. However, if a stranger could use an invalid or unauthorized token to access private ratings on a real system, it would be a security problem because private user data could be exposed.
+8. An API test can check status codes, response data, and whether the API behaves correctly. A test through the web pages can check visual appearance, layout, and whether the user interface works correctly.
