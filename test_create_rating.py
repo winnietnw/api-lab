@@ -1,5 +1,9 @@
 import pytest
 
+DECIMAL_ERROR = "json: cannot unmarshal number 3.5 into Go struct field Rating.stars of type int"
+TEXT_ERROR = "json: cannot unmarshal string into Go struct field Rating.stars of type int"
+PIZZA_ERROR = "pizza ID 999999999 not found"
+AUTH_ERROR = "authentication failed"
 STARS_ERROR = "number of stars must be between 1 and 5 (inclusive)"
 
 
@@ -19,3 +23,48 @@ def test_stars_out_of_range(api, auth, pizza_id, stars):
     res = api.post("/api/ratings", json=new, headers=auth)
     assert res.status_code == 400
     assert res.json() == {"error": STARS_ERROR}
+
+# C2: decimal stars are refused.
+def test_stars_decimal(api, auth, pizza_id):
+    new = {"pizza_id": pizza_id, "stars": 3.5}
+    res = api.post("/api/ratings", json=new, headers=auth)
+    assert res.status_code == 400
+    assert res.json() == {"error": DECIMAL_ERROR}
+
+# C2: text stars are refused.
+def test_stars_text(api, auth, pizza_id):
+    new = {"pizza_id": pizza_id, "stars": "3"}
+    res = api.post("/api/ratings", json=new, headers=auth)
+    assert res.status_code == 400
+    assert res.json() == {"error": TEXT_ERROR}
+
+# C2: missing stars are refused.
+def test_stars_missing(api, auth, pizza_id):
+    new = {"pizza_id": pizza_id}
+    res = api.post("/api/ratings", json=new, headers=auth)
+    assert res.status_code == 400
+    assert res.json() == {"error": STARS_ERROR}
+
+# C3: a pizza that does not exist is refused.
+def test_pizza_does_not_exist(api, auth):
+    new = {"pizza_id": 999999999, "stars": 3}
+    res = api.post("/api/ratings", json=new, headers=auth)
+    assert res.status_code == 400
+    assert res.json() == {"error": PIZZA_ERROR}
+
+# C4: a request without a token is refused.
+def test_rating_without_token(api, pizza_id):
+    new = {"pizza_id": pizza_id, "stars": 3}
+    res = api.post("/api/ratings", json=new)
+    assert res.status_code == 401
+    assert res.json() == {"error": AUTH_ERROR}
+
+# C4: a request with an invalid token is refused.
+def test_rating_with_wrong_token(api, pizza_id):
+    new = {"pizza_id": pizza_id, "stars": 3}
+    wrong_auth = {"Authorization": "token abc"}
+
+    res = api.post("/api/ratings", json=new, headers=wrong_auth)
+
+    assert res.status_code == 401
+    assert res.json() == {"error": AUTH_ERROR}
